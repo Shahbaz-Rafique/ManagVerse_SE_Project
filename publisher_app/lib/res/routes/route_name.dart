@@ -7,4 +7,6 @@ class RouteName {
   static const String addAuthor = '/aadAuthorPage';
   static const String forgetPassword = '/forgetPassword';
   static const String signup = '/signup';
+  static const String addBook = '/addBooks';
+  static const String manageBooks = '/manageBooks';
 }

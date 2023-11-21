@@ -11,9 +11,11 @@ class CustomTextField extends StatelessWidget {
     this.textInputType = TextInputType.text,
     this.textInputAction = TextInputAction.next,
     this.init,
+    this.lines,
   });
 // 'Enter your name '
   final String text;
+  final int? lines;
   final String? init;
 
   final FocusNode thisNode;
@@ -27,6 +29,7 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       initialValue: init,
       focusNode: thisNode,
+      maxLines: lines,
       textInputAction: textInputAction,
       keyboardType: textInputType,
       decoration: InputDecoration(

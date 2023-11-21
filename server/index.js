@@ -8,7 +8,7 @@ const morgan = require("morgan");
 var cookieParser = require("cookie-parser");
 require("dotenv").config();
 const authorRoute = require("./routes/author_route");
-const bookRoute = require("./routes/bookRoute");
+const bookRoute = require("./routes/book_route");
 var app = express();
 
 app.use(cors());

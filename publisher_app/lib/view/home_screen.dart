@@ -1,11 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:publisher_app/res/colors.dart';
+
 import '../data/provider/user_provider.dart';
-import '../res/colors.dart';
 import 'drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -16,29 +15,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Map<String, String>> _data = [
-    {
-      'name': 'User',
-      'icon': 'assets/images/PhUsersDuotone.svg',
-      'page': '',
-    },
-    {
-      'name': 'Books',
-      'icon': 'assets/images/Group.svg',
-      'page': '',
-    },
-    {
-      'name': 'Staff Member',
-      'icon': 'assets/images/TdesignUsergroup.svg',
-      'page': '',
-    },
-    {
-      'name': 'Publishers',
-      'icon': 'assets/images/PhUsersDuotone.svg',
-      'page': '',
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     UserProvider up = Provider.of<UserProvider>(context, listen: false);
@@ -61,54 +37,48 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: _data.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              // Navigator.pushNamed(
-              //   context,
-              //   _data[index]['page'].toString(),
-              // );
-            },
-            child: Container(
+      body: Container(
+        color: darkBlueColor.withOpacity(0.2),
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            SizedBox(
               height: 200,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: darkBlueColor,
-              ),
-              margin: const EdgeInsets.all(5),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Row(
                 children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: 120,
-                    height: 120,
-                    decoration: const BoxDecoration(),
-                    child: SvgPicture.asset(
-                      _data[index]['icon'].toString(),
-                      height: 100,
-                      width: 100,
-                      color: Colors.white,
-                      // fit: BoxFit.fill,
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: darkBlueColor,
+                      ),
                     ),
                   ),
-                  const Gap(5),
-                  Text(
-                    _data[index]['name'].toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: darkBlueColor,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-          );
-        },
+            Expanded(
+              child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index) {
+                  return Text(
+                    index.toString(),
+                  );
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

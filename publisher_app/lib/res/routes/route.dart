@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:publisher_app/view/add_author.dart';
+import 'package:publisher_app/view/add_books.dart';
+import 'package:publisher_app/view/books_manage.dart';
 import '../../view/authors_manage.dart';
 import '../../view/forget_password.dart';
 import '../../view/home_screen.dart';
@@ -41,6 +43,16 @@ class MyRoute {
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => const ForgotPassword(),
+        );
+      case RouteName.addBook:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => const AddBooks(),
+        );
+      case RouteName.manageBooks:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => const BookManage(),
         );
       case RouteName.login:
         return MaterialPageRoute(

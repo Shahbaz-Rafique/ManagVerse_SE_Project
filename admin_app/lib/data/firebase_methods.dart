@@ -125,4 +125,17 @@ class FireBaseMethods with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<int> getUsersRegisteredLast24Hours() async {
+    final DateTime now = DateTime.now();
+    final DateTime twentyFourHoursAgo = now.subtract(Duration(days: 1));
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection('user')
+        .where(
+          'registrationTimestamp',
+          isGreaterThanOrEqualTo: twentyFourHoursAgo.toString(),
+        )
+        .get();
+    return result.size;
+  }
 }
