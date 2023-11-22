@@ -64,10 +64,10 @@ class _BookManageState extends State<BookManage> {
                     label: const Text('Active'),
                   ),
                   FilterChip(
-                    selected: query == 'active=!true' ? true : false,
+                    selected: query == 'active=false' ? true : false,
                     onSelected: (v) {
                       setState(() {
-                        query = 'active=!true';
+                        query = 'active=false';
                       });
                     },
                     label: const Text('In Active'),
@@ -77,7 +77,7 @@ class _BookManageState extends State<BookManage> {
             ),
             Expanded(
               child: FutureBuilder(
-                future: Provider.of<APICalls>(context).getBooks(),
+                future: Provider.of<APICalls>(context).getBooks(query),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -94,7 +94,7 @@ class _BookManageState extends State<BookManage> {
                       itemBuilder: (BuildContext context, int index) {
                         return ChangeNotifierProvider.value(
                           value: snapshot.data!.data![index],
-                          child:const BookCard(),
+                          child: BookCard(onCallBack: onCallBack),
                         );
                       },
                     );
@@ -112,5 +112,9 @@ class _BookManageState extends State<BookManage> {
         ),
       ),
     );
+  }
+
+  void onCallBack() {
+    setState(() {});
   }
 }

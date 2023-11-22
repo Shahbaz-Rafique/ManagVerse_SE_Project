@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -156,15 +155,63 @@ class APICalls extends ChangeNotifier {
     }
   }
 
-  Future<Books> getBooks() async {
+  Future<AuthorResponse> updateBooks(BookModel books, String id) async {
+    try {
+      Response response = await put(
+        Uri.parse('$url$book$route$id'),
+        body: json.encode(books.toMap()),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+      AuthorResponse ar =
+          AuthorResponse.fromJson(json.decode(response.body.toString()));
+      return ar;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Books> getBooks(String query) async {
     try {
       Response response = await get(
-        Uri.parse('$url$book$route'),
+        Uri.parse('$url$book$route?$query'),
         headers: {
           'Content-Type': 'application/json',
         },
       );
       Books ar = Books.fromJson(json.decode(response.body.toString()));
+      return ar;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<AuthorResponse> bookContinueStatusChange(
+      bool active, String id) async {
+    try {
+      Response response = await put(Uri.parse('$url$book${route}continue/$id'),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: json.encode({'isContinue': active}));
+      AuthorResponse ar =
+          AuthorResponse.fromJson(json.decode(response.body.toString()));
+      return ar;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<AuthorResponse> bookStatusChange(bool active, String id) async {
+    try {
+      Response response = await put(Uri.parse('$url$book${route}active/$id'),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: json.encode({'active': active}));
+      AuthorResponse ar =
+          AuthorResponse.fromJson(json.decode(response.body.toString()));
       return ar;
     } catch (e) {
       rethrow;

@@ -29,7 +29,7 @@ class _AuthorCardState extends State<AuthorCard> {
           itemBuilder: (context) => [
             PopupMenuItem(
               child: const Text('Edit'),
-              onTap: () async {
+              onTap: () {
                 Navigator.pushNamed(context, RouteName.addAuthor, arguments: d);
               },
             ),

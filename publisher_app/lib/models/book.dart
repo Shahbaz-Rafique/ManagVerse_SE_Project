@@ -47,6 +47,8 @@ class BookValue with ChangeNotifier {
   String? iSBN;
   String? language;
   String? genre;
+  String? createdAt;
+  String? updatedAt;
   int? iV;
 
   BookValue(
@@ -67,6 +69,8 @@ class BookValue with ChangeNotifier {
       this.iSBN,
       this.language,
       this.genre,
+      this.createdAt,
+      this.updatedAt,
       this.iV});
 
   BookValue.fromJson(Map<String, dynamic> json) {
@@ -88,6 +92,8 @@ class BookValue with ChangeNotifier {
     language = json['language'];
     genre = json['genre'];
     iV = json['__v'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
   }
 
   Map<String, dynamic> toJson() {
@@ -110,6 +116,9 @@ class BookValue with ChangeNotifier {
     data['language'] = language;
     data['genre'] = genre;
     data['__v'] = iV;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+
     return data;
   }
 }

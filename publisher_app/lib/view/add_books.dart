@@ -47,12 +47,12 @@ class _AddBooksState extends State<AddBooks> {
     language: '',
     genre: '',
   );
+  BookValue? bv;
   a.Authors aut = a.Authors();
   final TextStyle txtStyle = const TextStyle(
     fontWeight: FontWeight.w800,
   );
   bool init = true;
-
   @override
   void dispose() {
     nameNode.dispose();
@@ -67,6 +67,21 @@ class _AddBooksState extends State<AddBooks> {
   }
 
   @override
+  void didChangeDependencies() {
+    if (init) {
+      BookValue? bookModel =
+          ModalRoute.of(context)!.settings.arguments as BookValue?;
+
+      if (bookModel != null) {
+        bv = bookModel;
+        _bm.category = bv?.category;
+      }
+      init = false;
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
@@ -76,9 +91,9 @@ class _AddBooksState extends State<AddBooks> {
         iconTheme: Theme.of(context).iconTheme,
         backgroundColor: darkBlueColor,
         centerTitle: true,
-        title: const Text(
-          'Add New Author',
-          style: TextStyle(
+        title: Text(
+          bv == null ? 'Add New Book' : 'Update Book',
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
             fontFamily: 'Inter',
@@ -95,8 +110,8 @@ class _AddBooksState extends State<AddBooks> {
                   onPressed: () {
                     onSave();
                   },
-                  icon: const Icon(
-                    Icons.save,
+                  icon: Icon(
+                    bv == null ? Icons.save : Icons.update,
                     color: Colors.white,
                   ),
                 ),
@@ -119,6 +134,7 @@ class _AddBooksState extends State<AddBooks> {
                 child: Column(
                   children: [
                     CustomTextField(
+                      init: bv?.name ?? "",
                       text: 'Enter publisher name ',
                       thisNode: nameNode,
                       onSubmit: (v) {
@@ -134,7 +150,7 @@ class _AddBooksState extends State<AddBooks> {
                         _bm = BookModel(
                           author: _bm.author,
                           category: _bm.category,
-                          name: v.toString(),
+                          name: v!.trim().toString(),
                           publisher: _bm.publisher,
                           summery: _bm.summery,
                           images: _bm.images,
@@ -148,6 +164,7 @@ class _AddBooksState extends State<AddBooks> {
                       height: size.height * 0.027,
                     ),
                     CustomTextField(
+                      init: bv?.summery ?? "",
                       text: 'Enter Summery ',
                       thisNode: summeryNode,
                       lines: 10,
@@ -167,7 +184,7 @@ class _AddBooksState extends State<AddBooks> {
                           category: _bm.category,
                           name: _bm.name,
                           publisher: _bm.publisher,
-                          summery: v.toString(),
+                          summery: v!.trim().toString(),
                           images: _bm.images,
                           iSBN: _bm.iSBN,
                           language: _bm.language,
@@ -179,6 +196,7 @@ class _AddBooksState extends State<AddBooks> {
                       height: size.height * 0.027,
                     ),
                     CustomTextField(
+                      init: bv?.iSBN ?? "",
                       text: 'Enter ISBN ',
                       thisNode: isbnNode,
                       textInputType: TextInputType.emailAddress,
@@ -199,7 +217,7 @@ class _AddBooksState extends State<AddBooks> {
                           publisher: _bm.publisher,
                           summery: _bm.summery,
                           images: _bm.images,
-                          iSBN: v.toString(),
+                          iSBN: v!.trim().toString(),
                           language: _bm.language,
                           genre: _bm.genre,
                         );
@@ -209,6 +227,7 @@ class _AddBooksState extends State<AddBooks> {
                       height: size.height * 0.027,
                     ),
                     CustomTextField(
+                      init: bv?.genre ?? "",
                       text: 'Enter Genre ',
                       thisNode: genreNode,
                       textInputType: TextInputType.emailAddress,
@@ -231,7 +250,7 @@ class _AddBooksState extends State<AddBooks> {
                           images: _bm.images,
                           iSBN: _bm.iSBN,
                           language: _bm.language,
-                          genre: v.toString(),
+                          genre: v!.trim().toString(),
                         );
                       },
                     ),
@@ -239,6 +258,7 @@ class _AddBooksState extends State<AddBooks> {
                       height: size.height * 0.027,
                     ),
                     CustomTextField(
+                      init: bv?.author ?? "",
                       text: 'Enter an Author name ',
                       thisNode: authorNode,
                       textInputType: TextInputType.emailAddress,
@@ -269,6 +289,7 @@ class _AddBooksState extends State<AddBooks> {
                       height: size.height * 0.027,
                     ),
                     CustomTextField(
+                      init: bv?.language ?? "",
                       text: 'Enter Language ',
                       thisNode: langNode,
                       textInputType: TextInputType.emailAddress,
@@ -290,7 +311,7 @@ class _AddBooksState extends State<AddBooks> {
                           summery: _bm.summery,
                           images: _bm.images,
                           iSBN: _bm.iSBN,
-                          language: v.toString(),
+                          language: v!.trim().toString(),
                           genre: _bm.genre,
                         );
                       },
@@ -401,26 +422,28 @@ class _AddBooksState extends State<AddBooks> {
                     SizedBox(
                       height: size.height * 0.027,
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(),
-                      onPressed: () async {
-                        List<XFile>? result =
-                            await ImagePicker().pickMultiImage();
-                        if (result.isNotEmpty) {
-                          setState(() {
-                            images = result.map((XFile file) {
-                              String fileName = path.basename(file.path);
-                              return File(fileName);
-                            }).toList();
-                          });
-                        }
-                      },
-                      child: Text(
-                        images.isEmpty
-                            ? 'Upload Images'
-                            : '${images.length} selected',
-                      ),
-                    ),
+                    bv == null
+                        ? ElevatedButton(
+                            style: ElevatedButton.styleFrom(),
+                            onPressed: () async {
+                              List<XFile>? result =
+                                  await ImagePicker().pickMultiImage();
+                              if (result.isNotEmpty) {
+                                setState(() {
+                                  images = result.map((XFile file) {
+                                    String fileName = path.basename(file.path);
+                                    return File(fileName);
+                                  }).toList();
+                                });
+                              }
+                            },
+                            child: Text(
+                              images.isEmpty
+                                  ? 'Upload Images'
+                                  : '${images.length} selected',
+                            ),
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: size.height * 0.027,
                     ),
@@ -448,7 +471,7 @@ class _AddBooksState extends State<AddBooks> {
           });
           _bm = BookModel(
             author: _bm.author,
-            category: 'comics',
+            category: _bm.category,
             name: _bm.name,
             publisher: up.getPublisher!.id,
             summery: _bm.summery,
@@ -457,8 +480,13 @@ class _AddBooksState extends State<AddBooks> {
             language: _bm.language,
             genre: _bm.genre,
           );
-
           _key.currentState!.save();
+          if (bv != null) {
+            AuthorResponse ar =
+                await Provider.of<APICalls>(context, listen: false)
+                    .updateBooks(_bm, bv!.sId!);
+            Utils().showToast(ar.message);
+          } else {
 //          for (File element in images) {
             // String pa =
             //     await Provider.of<FireBaseMethods>(context, listen: false)
@@ -468,11 +496,12 @@ class _AddBooksState extends State<AddBooks> {
             //   element,
             // );
             // _bm.images!.add(pa);
-  //        }
-          AuthorResponse ar =
-              await Provider.of<APICalls>(context, listen: false)
-                  .uploadBooks(_bm);
-          Utils().showToast(ar.message);
+            //        }
+            AuthorResponse ar =
+                await Provider.of<APICalls>(context, listen: false)
+                    .uploadBooks(_bm);
+            Utils().showToast(ar.message);
+          }
           setState(() {
             isLoading = false;
           });

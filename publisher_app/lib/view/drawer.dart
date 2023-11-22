@@ -95,11 +95,11 @@ class _MyDrawerState extends State<MyDrawer> {
                     Navigator.pushNamed(context, RouteName.manageBooks);
                   },
                   title: 'Books'),
-              AppListTile(
-                  onTap: () {
-                    Navigator.pushNamed(context, RouteName.author);
-                  },
-                  title: 'Authors'),
+              // AppListTile(
+              //     onTap: () {
+              //       Navigator.pushNamed(context, RouteName.author);
+              //     },
+              //     title: 'Authors'),
               AppListTile(
                 onTap: () async {
                   await Provider.of<FireBaseMethods>(context, listen: false)
