@@ -155,6 +155,39 @@ class APICalls extends ChangeNotifier {
     }
   }
 
+  Future<AuthorResponse> uploadChapters(Map<String, dynamic> booksCh) async {
+    try {
+      Response response = await post(
+        Uri.parse('$url$chapter$route'),
+        body: json.encode(booksCh),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+      AuthorResponse ar =
+          AuthorResponse.fromJson(json.decode(response.body.toString()));
+      return ar;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  Future<AuthorResponse> getChapters() async {
+    try {
+      Response response = await get(
+        Uri.parse('$url$chapter$route'),
+       
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+      AuthorResponse ar =
+          AuthorResponse.fromJson(json.decode(response.body.toString()));
+      return ar;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<AuthorResponse> updateBooks(BookModel books, String id) async {
     try {
       Response response = await put(

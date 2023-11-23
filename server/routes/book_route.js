@@ -9,7 +9,6 @@ router.get("/", async (req, res) => {
 		if (active !== undefined) {
 			query.active = active === "true";
 		}
-
 		let book = await bookModel.find(query);
 		res.status(200).send({ data: book, message: "Successful", status: "ok" });
 	} catch (e) {

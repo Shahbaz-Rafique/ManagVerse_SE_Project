@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-mongoose.set("strictQuery", true);
+mongoose.set("strictQuery", false);
 
 const url = process.env.MONGO_URL;
 mongoose.connect(url, {
@@ -15,4 +15,4 @@ db.on("error", (err) => {
 });
 db.once("open", () => {
 	console.log("connected with db");
-});  
+});

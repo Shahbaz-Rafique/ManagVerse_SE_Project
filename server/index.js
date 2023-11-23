@@ -9,6 +9,7 @@ var cookieParser = require("cookie-parser");
 require("dotenv").config();
 const authorRoute = require("./routes/author_route");
 const bookRoute = require("./routes/book_route");
+const chapterRoute = require("./routes/chapter_route");
 var app = express();
 
 app.use(cors());
@@ -20,6 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/author", authorRoute);
 app.use("/book", bookRoute);
+app.use("/chapter", chapterRoute);
 app.get("/", (req, res) => {
 	res.send("this is server");
 });

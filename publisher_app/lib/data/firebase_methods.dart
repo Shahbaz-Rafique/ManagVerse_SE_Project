@@ -15,7 +15,7 @@ class FireBaseMethods with ChangeNotifier {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<String> uploadPost(String path, String name, File file) async {
-    Reference ref = _storage.ref().child(path).child(name);
+    Reference ref = _storage.ref().child('$path/$name.pdf');
     UploadTask uploadTask = ref.putFile(file);
     await Future.value(uploadTask);
     String link = await ref.getDownloadURL();

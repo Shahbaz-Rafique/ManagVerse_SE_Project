@@ -20,7 +20,8 @@ class _ViewBookDetailedState extends State<ViewBookDetailed> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(RouteName.addChapter);
+              Navigator.of(context)
+                  .pushNamed(RouteName.addChapter, arguments: bVal.sId);
             },
             icon: const Icon(Icons.add),
             tooltip: 'Add Chapters',

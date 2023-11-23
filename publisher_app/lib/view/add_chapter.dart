@@ -2,15 +2,16 @@
 
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
+import 'package:publisher_app/data/API/api_calls.dart';
+import 'package:publisher_app/data/firebase_methods.dart';
+import 'package:publisher_app/models/author_response.dart';
 import 'package:publisher_app/res/colors.dart';
 import 'package:publisher_app/res/text_field/custom_text_field.dart';
-import 'package:image_picker/image_picker.dart';
-import '../data/API/api_calls.dart';
 import '../data/provider/user_provider.dart';
-import '../models/books_data.dart';
 import '../utils/utils.dart';
 
 class AddChapters extends StatefulWidget {
@@ -24,11 +25,8 @@ class _AddChaptersState extends State<AddChapters> {
   bool isLoading = false;
   final _key = GlobalKey<FormState>();
   final nameNode = FocusNode();
-  final authorNode = FocusNode();
-  final summeryNode = FocusNode();
-  final isbnNode = FocusNode();
-  final langNode = FocusNode();
-  final genreNode = FocusNode();
+  final chNoNode = FocusNode();
+  final btn1Node = FocusNode();
   final btn2Node = FocusNode();
   List<File> images = [];
   final TextStyle txtStyle = const TextStyle(
@@ -38,19 +36,35 @@ class _AddChaptersState extends State<AddChapters> {
   @override
   void dispose() {
     nameNode.dispose();
-    authorNode.dispose();
-    genreNode.dispose();
-    langNode.dispose();
-    summeryNode.dispose();
-    isbnNode.dispose();
+    chNoNode.dispose();
+    btn1Node.dispose();
     btn2Node.dispose();
-
     super.dispose();
   }
+
+  File? _file;
+  Map<String, dynamic> _data = {
+    'chapterName': '',
+    'chapterNo': 0,
+    'file': '',
+    'bookId': '',
+    'active': true,
+    'rating': [],
+  };
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
+    final id = ModalRoute.of(context)!.settings.arguments;
+
+    _data = {
+      'chapterName': _data['chapterName']!,
+      'chapterNo': _data['chapterNo'],
+      'file': _data['file']!,
+      'bookId': id,
+      'active': _data['active']!,
+      'rating': _data['rating']!,
+    };
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: darkBlueColor,
@@ -103,98 +117,111 @@ class _AddChaptersState extends State<AddChapters> {
                 child: Column(
                   children: [
                     CustomTextField(
-                      text: 'Enter publisher name ',
+                      text: 'Enter Chapter name ',
                       thisNode: nameNode,
                       onSubmit: (v) {
-                        FocusScope.of(context).requestFocus(summeryNode);
+                        FocusScope.of(context).requestFocus(chNoNode);
                       },
                       onValidate: (v) {
                         if (v!.isEmpty) {
-                          return 'enter a name';
+                          return 'enter a valid name';
                         }
                         return null;
                       },
-                      onSave: (v) {},
+                      onSave: (v) {
+                        _data = {
+                          'chapterName': v!,
+                          'chapterNo': _data['chapterNo']!,
+                          'file': _data['file']!,
+                          'bookId': _data['bookId']!,
+                          'active': _data['active']!,
+                          'rating': _data['rating']!,
+                        };
+                      },
                     ),
                     SizedBox(
                       height: size.height * 0.027,
                     ),
                     CustomTextField(
-                      text: 'Enter Summery ',
-                      thisNode: summeryNode,
-                      lines: 10,
-                      textInputType: TextInputType.emailAddress,
+                      textInputType: TextInputType.number,
+                      text: 'Enter Chapter No ',
+                      thisNode: chNoNode,
                       onSubmit: (v) {
-                        FocusScope.of(context).requestFocus(isbnNode);
+                        FocusScope.of(context).requestFocus(btn1Node);
                       },
                       onValidate: (v) {
                         if (v!.isEmpty) {
-                          return 'enter text';
+                          return 'enter a valid No';
+                        } else if (int.parse(v) < 0) {
+                          return 'enter a Positive No';
                         }
                         return null;
                       },
-                      onSave: (v) {},
+                      onSave: (v) {
+                        _data = {
+                          'chapterName': _data['chapterName']!,
+                          'chapterNo': int.parse(v!),
+                          'file': _data['file']!,
+                          'bookId': _data['bookId']!,
+                          'active': _data['active']!,
+                          'rating': _data['rating']!,
+                        };
+                      },
                     ),
                     SizedBox(
                       height: size.height * 0.027,
                     ),
-                    CustomTextField(
-                      text: 'Enter ISBN ',
-                      thisNode: isbnNode,
-                      textInputType: TextInputType.emailAddress,
-                      onSubmit: (v) {
-                        FocusScope.of(context).requestFocus();
-                      },
-                      onValidate: (v) {
-                        if (v!.isEmpty) {
-                          return 'enter a valid ISBN';
-                        }
-                        return null;
-                      },
-                      onSave: (v) {},
-                    ),
-                    SizedBox(
-                      height: size.height * 0.027,
-                    ),
-                    CustomTextField(
-                      text: 'Enter Genre ',
-                      thisNode: genreNode,
-                      textInputType: TextInputType.emailAddress,
-                      onSubmit: (v) {
-                        FocusScope.of(context).requestFocus();
-                      },
-                      onValidate: (v) {
-                        if (v!.isEmpty) {
-                          return 'enter a valid Genre';
-                        }
-                        return null;
-                      },
-                      onSave: (v) {},
-                    ),
-                    SizedBox(
-                      height: size.height * 0.027,
-                    ),
-                    SizedBox(
-                      height: size.height * 0.027,
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(),
-                      onPressed: () async {
-                        List<XFile>? result =
-                            await ImagePicker().pickMultiImage();
-                        if (result.isNotEmpty) {
-                          setState(() {
-                            images = result.map((XFile file) {
-                              String fileName = path.basename(file.path);
-                              return File(fileName);
-                            }).toList();
-                          });
-                        }
-                      },
-                      child: Text(
-                        images.isEmpty
-                            ? 'Upload Images'
-                            : '${images.length} selected',
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.white,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Text(
+                                _file == null
+                                    ? 'Select file'
+                                    : path.basename(_file!.path.toString()),
+                                softWrap: false,
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                                style: const TextStyle(),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            visualDensity:
+                                VisualDensity.adaptivePlatformDensity,
+                            onPressed: () async {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles(
+                                allowMultiple: false,
+                                type: FileType.custom,
+                                allowedExtensions: [
+                                  'pdf',
+                                  'docx',
+                                ],
+                              );
+                              if (result != null) {
+                                File file = File(result.files[0].path!);
+                                setState(() {
+                                  _file = File(file.path);
+                                });
+                              } else {
+                                // User canceled the picker
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.upload_file,
+                              color: darkBlueColor,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(
@@ -215,18 +242,28 @@ class _AddChaptersState extends State<AddChapters> {
     up.refreshUser();
     try {
       if (_key.currentState!.validate()) {
-        if ("_bm.category" == '') {
-          Utils().showToast('Gender is not selected');
+        if (_file == null) {
+          Utils().showToast('file is not selected');
           return;
         } else {
           setState(() {
             isLoading = true;
           });
-          if ('bv ' != null) {
-            Utils().showToast("ar.message");
-          } else {
-            Utils().showToast("ar.message");
-          }
+          _key.currentState!.save();
+          String name = path.basename(_file!.path);
+          String filePath =
+              await Provider.of<FireBaseMethods>(context, listen: false)
+                  .uploadPost('books/${up.getPublisher!.id}', name, _file!);
+          _data['file'] = filePath;
+          AuthorResponse ar =
+              await Provider.of<APICalls>(context, listen: false)
+                  .uploadChapters(_data);
+
+          Utils().showToast(ar.message);
+          // if ('bv ' != null) {
+          // } else {
+          // Utils().showToast("ar.message");
+          // }
           setState(() {
             isLoading = false;
           });
@@ -236,6 +273,7 @@ class _AddChaptersState extends State<AddChapters> {
       setState(() {
         isLoading = false;
       });
+      print(e);
       Utils().showToast(
         e.toString(),
       );
