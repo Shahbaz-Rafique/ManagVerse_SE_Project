@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:user_app/view%20model/local_storage.dart';
 
 import '../models/user_model.dart';
 
@@ -38,15 +39,16 @@ class FireBaseMethods with ChangeNotifier {
         email: user['email']!,
         password: user['password']!,
       );
+      print(_auth.currentUser!.uid);
+      UserModel u = await getUserData(_auth.currentUser!.uid);
+      await LocalStorage().setUser(u);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<UserModel> getUserData() async {
-    User? user = _auth.currentUser;
-    DocumentSnapshot doc =
-        await _firestore.collection('user').doc(user!.uid).get();
+  Future<UserModel> getUserData(String id) async {
+    DocumentSnapshot doc = await _firestore.collection('user').doc(id).get();
     return UserModel.fromMap(doc.data() as Map<String, dynamic>);
   }
 }

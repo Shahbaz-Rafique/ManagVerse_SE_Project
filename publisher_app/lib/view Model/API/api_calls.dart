@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:publisher_app/data/firebase_methods.dart';
-import 'package:publisher_app/models/book.dart';
-import 'package:publisher_app/models/books_data.dart';
-import '../../data/API/end_points.dart';
+import 'package:publisher_app/models/chapter_response.dart';
+import '/models/book.dart';
+import '/models/books_data.dart';
+import '.././API/end_points.dart';
 import '../../models/author_model.dart' as am;
 import '../../models/author_response.dart';
 import '../../utils/utils.dart';
@@ -171,17 +171,34 @@ class APICalls extends ChangeNotifier {
       rethrow;
     }
   }
-  Future<AuthorResponse> getChapters() async {
+
+  Future<ChaptersResponse> getChapters(String id) async {
     try {
       Response response = await get(
-        Uri.parse('$url$chapter$route'),
-       
+        Uri.parse('$url$chapter$route$id'),
         headers: {
           'Content-Type': 'application/json',
         },
       );
-      AuthorResponse ar =
-          AuthorResponse.fromJson(json.decode(response.body.toString()));
+      ChaptersResponse ar =
+          ChaptersResponse.fromJson(json.decode(response.body.toString()));
+      return ar;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ChaptersResponse> chapterStatusChange(bool active, String id) async {
+    try {
+      Response response = await put(
+        Uri.parse('$url$chapter$route$id'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'active': active}),
+      );
+      ChaptersResponse ar =
+          ChaptersResponse.fromJson(json.decode(response.body.toString()));
       return ar;
     } catch (e) {
       rethrow;

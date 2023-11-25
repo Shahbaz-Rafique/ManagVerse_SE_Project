@@ -2,7 +2,7 @@
 
 import 'package:publisher_app/res/colors.dart';
 
-import '../data/provider/user_provider.dart';
+import '../view Model/provider/user_provider.dart';
 import 'drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

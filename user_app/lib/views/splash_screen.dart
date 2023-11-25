@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:user_app/data/provider/user_provider.dart';
+import 'package:user_app/view%20model/provider/user_provider.dart';
 
 import '../res/routes/route_name.dart';
 
@@ -25,6 +25,8 @@ class _SplashScreenState extends State<SplashScreen> {
         if (_auth.currentUser == null) {
           Navigator.pushReplacementNamed(context, RouteName.start);
         } else {
+          UserProvider up = Provider.of<UserProvider>(context, listen: false);
+          up.refreshUser();
           Navigator.pushReplacementNamed(context, RouteName.home);
         }
       },
@@ -34,8 +36,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider up = Provider.of<UserProvider>(context);
-    up.refreshUser();
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:publisher_app/data/local%20storage/local_storage.dart';
+import 'package:publisher_app/view%20Model/local%20storage/local_storage.dart';
 import 'package:publisher_app/models/publisher_model.dart';
 
 class FireBaseMethods with ChangeNotifier {
@@ -15,7 +15,7 @@ class FireBaseMethods with ChangeNotifier {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<String> uploadPost(String path, String name, File file) async {
-    Reference ref = _storage.ref().child('$path/$name.pdf');
+    Reference ref = _storage.ref().child('$path/$name');
     UploadTask uploadTask = ref.putFile(file);
     await Future.value(uploadTask);
     String link = await ref.getDownloadURL();

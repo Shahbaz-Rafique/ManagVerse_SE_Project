@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const books = new mongoose.Schema(
 	{
-		name: { type: String, required: true, unique: true },
+		name: { type: String, required: true, },
 		publisher: { type: String, required: true },
 		author: { type: String, required: true },
 		category: { type: String, required: true, enum: ["novel", "comics"] },

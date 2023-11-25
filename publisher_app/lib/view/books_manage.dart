@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:publisher_app/data/API/api_calls.dart';
+import 'package:publisher_app/view%20Model/API/api_calls.dart';
 import 'package:publisher_app/res/colors.dart';
 import 'package:publisher_app/res/routes/route_name.dart';
 
@@ -15,6 +15,7 @@ class BookManage extends StatefulWidget {
 
 class _BookManageState extends State<BookManage> {
   String query = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,6 +98,10 @@ class _BookManageState extends State<BookManage> {
                           child: BookCard(onCallBack: onCallBack),
                         );
                       },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text(snapshot.error.toString()),
                     );
                   } else {
                     return Center(

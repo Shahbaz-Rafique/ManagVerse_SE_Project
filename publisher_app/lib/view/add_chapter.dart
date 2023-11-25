@@ -6,12 +6,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
-import 'package:publisher_app/data/API/api_calls.dart';
-import 'package:publisher_app/data/firebase_methods.dart';
+import 'package:publisher_app/view%20Model/API/api_calls.dart';
+import 'package:publisher_app/view%20Model/firebase_methods.dart';
 import 'package:publisher_app/models/author_response.dart';
 import 'package:publisher_app/res/colors.dart';
 import 'package:publisher_app/res/text_field/custom_text_field.dart';
-import '../data/provider/user_provider.dart';
+import '../view Model/provider/user_provider.dart';
 import '../utils/utils.dart';
 
 class AddChapters extends StatefulWidget {
@@ -94,7 +94,7 @@ class _AddChaptersState extends State<AddChapters> {
                     onSave();
                   },
                   icon: Icon(
-                    'bv' == null ? Icons.save : Icons.update,
+                    'bv' != null ? Icons.save : Icons.update,
                     color: Colors.white,
                   ),
                 ),

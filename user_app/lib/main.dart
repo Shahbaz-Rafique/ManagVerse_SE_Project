@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import "package:provider/provider.dart";
 import 'package:firebase_core/firebase_core.dart';
-import 'package:user_app/data/provider/user_provider.dart';
+import 'package:user_app/view%20model/provider/user_provider.dart';
+import 'package:user_app/view%20model/services/api_calls.dart';
 
 import '../res/colors.dart';
 import '../res/routes/route_name.dart';
-import '../data/firebase_methods.dart';
+import 'view model/firebase_methods.dart';
 import '../res/routes/route.dart';
 import 'firebase_options.dart';
 
@@ -34,6 +35,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ApiCalls(),
         ),
       ],
       child: MaterialApp(

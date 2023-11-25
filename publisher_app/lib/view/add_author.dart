@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:publisher_app/data/API/api_calls.dart';
-import 'package:publisher_app/data/provider/user_provider.dart';
+import 'package:publisher_app/view%20Model/API/api_calls.dart';
+import 'package:publisher_app/view%20Model/provider/user_provider.dart';
 import 'package:publisher_app/models/author_model.dart' as am;
 
 import '../models/author_response.dart';

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../res/buttons/custom_button.dart';
 import '../res/buttons/text_button.dart';
-import '../data/firebase_methods.dart';
+import '../view model/firebase_methods.dart';
 import '../res/routes/route_name.dart';
 import '../res/text_field/custom_text_field.dart';
 import '../views/home_screen.dart';
@@ -248,7 +248,7 @@ class _LoginState extends State<Login> {
         });
         _key.currentState!.save();
 
-        await firebaseProvider.login(_user);
+          await firebaseProvider.login(_user);
         Utils().showToast('Successfully Login');
         if (auth.currentUser != null) {
           

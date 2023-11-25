@@ -23,24 +23,38 @@ router.get("/:id", async (req, res) => {
 	try {
 		const { active } = req.query;
 		const { id } = req.params;
-		console.log(id);
 		let query = {};
 		if (active !== undefined) {
 			query.active = active === "true";
 		}
 		var bookArray = [];
 		let book = await bookModel.findById(id);
-		// Use Promise.all to wait for all promises to resolve
 		await Promise.all(
 			book.chapters.map(async (e) => {
 				var chp = await chapterModel.findById(e);
 				bookArray.push(chp);
 			})
 		);
-		console.log(bookArray);
 		res
 			.status(200)
 			.send({ data: bookArray, message: "Successful", status: "ok" });
+	} catch (e) {
+		res.status(505).send({ data: null, message: e.message, status: "error" });
+	}
+});
+router.put("/:id", async (req, res) => {
+	try {
+		const { id } = req.params;
+		const { active } = req.body;
+		console.log(active);
+		const book = await bookModel.findByIdAndUpdate(
+			id,
+			{ active },
+			{
+				new: active,
+			}
+		);
+		res.status(200).send({ data: book, message: "Successful", status: "ok" });
 	} catch (e) {
 		res.status(505).send({ data: null, message: e.message, status: "error" });
 	}

@@ -2,18 +2,19 @@
 
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
-import 'package:publisher_app/data/firebase_methods.dart';
+import 'package:publisher_app/view%20Model/firebase_methods.dart';
 import 'package:publisher_app/models/author_model.dart' as a;
 import 'package:publisher_app/models/author_response.dart';
 import 'package:publisher_app/models/book.dart';
 import 'package:publisher_app/res/colors.dart';
 import 'package:publisher_app/res/text_field/custom_text_field.dart';
 import 'package:image_picker/image_picker.dart';
-import '../data/API/api_calls.dart';
-import '../data/provider/user_provider.dart';
+import '../view Model/API/api_calls.dart';
+import '../view Model/provider/user_provider.dart';
 import '../models/books_data.dart';
 import '../utils/utils.dart';
 
@@ -426,14 +427,15 @@ class _AddBooksState extends State<AddBooks> {
                         ? ElevatedButton(
                             style: ElevatedButton.styleFrom(),
                             onPressed: () async {
-                              List<XFile>? result =
-                                  await ImagePicker().pickMultiImage();
-                              if (result.isNotEmpty) {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles(
+                                allowMultiple: true,
+                              );
+                              if (result != null) {
                                 setState(() {
-                                  images = result.map((XFile file) {
-                                    String fileName = path.basename(file.path);
-                                    return File(fileName);
-                                  }).toList();
+                                  images = result.files
+                                      .map((e) => File(e.path.toString()))
+                                      .toList();
                                 });
                               }
                             },
@@ -487,16 +489,15 @@ class _AddBooksState extends State<AddBooks> {
                     .updateBooks(_bm, bv!.sId!);
             Utils().showToast(ar.message);
           } else {
-//          for (File element in images) {
-            // String pa =
-            //     await Provider.of<FireBaseMethods>(context, listen: false)
-            //         .uploadPost(
-            //   'bookImages/',
-            //   '${up.getPublisher!.id}/${path.basename(element.path)}',
-            //   element,
-            // );
-            // _bm.images!.add(pa);
-            //        }
+            for (File element in images) {
+              String pa =
+                  await Provider.of<FireBaseMethods>(context, listen: false)
+                      .uploadPost('booksPicture/${up.getPublisher!.id}',
+                          path.basename(element.path), element);
+              _bm.images!.add(pa);
+            }
+            _bm.images!.map((e) => print(e));
+            print(_bm.images!.length);
             AuthorResponse ar =
                 await Provider.of<APICalls>(context, listen: false)
                     .uploadBooks(_bm);

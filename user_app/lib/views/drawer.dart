@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:user_app/res/colors.dart';
 import 'package:gap/gap.dart';
 import 'package:user_app/res/list_tile.dart';
-import '/data/provider/user_provider.dart';
+import '../view model/provider/user_provider.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});

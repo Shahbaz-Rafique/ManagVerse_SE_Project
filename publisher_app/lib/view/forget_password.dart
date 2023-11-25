@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../data/firebase_methods.dart';
+import '../view Model/firebase_methods.dart';
 import '../res/buttons/custom_button.dart';
 import '../res/colors.dart';
 import '../res/text_field/custom_text_field.dart';

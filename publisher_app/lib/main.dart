@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import "package:provider/provider.dart";
 import 'package:firebase_core/firebase_core.dart';
-import 'package:publisher_app/data/API/api_calls.dart';
-import '../data/provider/user_provider.dart';
+import 'package:publisher_app/view%20Model/API/api_calls.dart';
+import 'view Model/provider/user_provider.dart';
 
 import '../res/colors.dart';
 import '../res/routes/route_name.dart';
-import '../data/firebase_methods.dart';
+import 'view Model/firebase_methods.dart';
 import '../res/routes/route.dart';
 import 'firebase_options.dart';
 

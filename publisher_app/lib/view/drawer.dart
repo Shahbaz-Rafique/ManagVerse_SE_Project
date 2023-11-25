@@ -5,11 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:gap/gap.dart';
 
 import '../res/colors.dart';
-import '../data/firebase_methods.dart';
+import '../view Model/firebase_methods.dart';
 import '../res/routes/route_name.dart';
 import '../utils/utils.dart';
 import '../res/list_tile.dart';
-import '../data/provider/user_provider.dart';
+import '../view Model/provider/user_provider.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
