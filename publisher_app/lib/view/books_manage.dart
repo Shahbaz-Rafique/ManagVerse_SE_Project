@@ -78,7 +78,8 @@ class _BookManageState extends State<BookManage> {
             ),
             Expanded(
               child: FutureBuilder(
-                future: Provider.of<APICalls>(context).getBooks(query),
+                future: Provider.of<APICalls>(context, listen: false)
+                    .getBooks(query),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:publisher_app/models/chapter_response.dart';
+import 'package:publisher_app/view%20Model/local%20storage/local_storage.dart';
 import '/models/book.dart';
 import '/models/books_data.dart';
 import '.././API/end_points.dart';
@@ -11,6 +12,7 @@ import '../../models/author_response.dart';
 import '../../utils/utils.dart';
 
 class APICalls extends ChangeNotifier {
+  final LocalStorage _ls = LocalStorage();
   Future<void> registerAuthor(String name, String email, String dob,
       String gender, String userID) async {
     try {
@@ -224,8 +226,9 @@ class APICalls extends ChangeNotifier {
 
   Future<Books> getBooks(String query) async {
     try {
+      final a = await _ls.getUser();
       Response response = await get(
-        Uri.parse('$url$book$route?$query'),
+        Uri.parse('$url$book${route}named/${a.id}?$query'),
         headers: {
           'Content-Type': 'application/json',
         },
